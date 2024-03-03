@@ -1,0 +1,35 @@
+body, h1, p, ol, button {
+    font-family: 'Arial', sans-serif;
+}
+
+#intro-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    background: white;
+}
+
+header h1 {
+    color: #333;
+}
+
+main {
+    text-align: center;
+}
+
+button {
+    background-color: #5C6BC0;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #3F51B5;
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Figma AR Viewer Plugin</title>
+</head>
+<body>
+    <div id="intro">
+        <h2>欢迎使用AR Viewer</h2>
+        <p>这个插件允许您以AR形式查看Figma设计。</p>
+        <button id="startBtn">Start to view spatial design</button>
+    </div>
+
+    <div id="selectFrame" style="display:none;">
+        <h2>选择一个Frame</h2>
+        <p>点击下方按钮开始选择Frame。</p>
+        <button id="selectBtn">Start to select</button>
+        <h3 id="frameName">Frame名称</h3>
+        <img id="frameImage" src="" alt="Frame缩略图">
+        <!-- 在ui.html中添加 -->
+        <button id="generateQrCode">Generate Marker</button>
+        <div id="qrCode"></div>
+
+    </div>
+
+    <script>
+        document.getElementById('startBtn').addEventListener('click', function() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('selectFrame').style.display = 'block';
+            parent.postMessage({ pluginMessage: { type: 'select-frame' } }, '*');
+        });
+        app.post('/generate-qr', async (req, res) => {
+    const frameData = req.body; // 获取发送的Frame信息
+    const qrCodeURL = await generateQrCode(frameData); // 生成QR码
+    res.json({ url: qrCodeURL }); // 将QR码URL发送回插件
+});
+
+
+        onmessage = (event) => {
+            const message = event.data.pluginMessage;
+            if (message.type === 'frame-selected') {
+                document.getElementById('frameName').textContent = message.name;
+                document.getElementById('frameImage').src = message.image;
+            }
+        }
+        document.getElementById('generateQrCode').addEventListener('click', function() {
+              // 示例URL，您需要替换为实际的API调用
+              const apiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example';
+              
+              // 设置QR码图片为API响应
+              document.getElementById('qrCode').innerHTML = `<img src="${apiUrl}" alt="QR Code"/>`;
+          });
+
+          const express = require('express');
+const app = express();
+const PORT = 3000;
+
+app.use(express.json()); // 用于解析JSON请求体
+
+app.post('/generate-qr', (req, res) => {
+    const frameData = req.body; // 从请求体获取数据
+    // 这里实现生成QR码的逻辑...
+    const qrCodeURL = '生成的QR码URL';
+    res.json({ url: qrCodeURL });
+});
+
+app.listen(PORT, () => {
+    console.log(`服务器运行在 http://localhost:${PORT}`);
+});
+
+
+    </script>
+</body>
+</html>
