@@ -1,11 +1,18 @@
-// api/generate-qr.js
+// /api/generate-qr.js
+const express = require('express');
 const QRCode = require('qrcode');
+const app = express();
 
-module.exports = (req, res) => {
-    const url = req.body.url; // 假设请求体中包含要编码的URL
+app.use(express.json()); // Middleware to parse JSON bodies
 
-    QRCode.toDataURL(url, (err, src) => {
-        if (err) res.status(500).send("Error generating QR code");
-        else res.json({ qrCodeURL: src });
-    });
-};
+app.post('*', async (req, res) => {
+    try {
+        const { data } = req.body; // Data to encode in the QR code, adjust according to your needs
+        const qrCodeUrl = await QRCode.toDataURL(data);
+        res.status(200).send({ url: qrCodeUrl });
+    } catch (error) {
+        res.status(500).send({ error: "Error generating QR code" });
+    }
+});
+
+module.exports = app;
