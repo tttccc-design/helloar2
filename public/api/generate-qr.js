@@ -6,6 +6,7 @@ const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
 
 app.post('*', async (req, res) => {
+    const { data } = req.body;
     try {
         const { data } = req.body; // Data to encode in the QR code, adjust according to your needs
         const qrCodeUrl = await QRCode.toDataURL(data);
