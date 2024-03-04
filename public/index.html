@@ -1,16 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>AR and QR Code Application</title>
-    <link rel="stylesheet" href="style.css">
+    <title>AR Viewer</title>
 </head>
 <body>
-    <div id="app">
-        <h1>Welcome to the AR and QR Code Application</h1>
-        <img src="images/logo.png" alt="Logo">
-        <!-- More content here -->
-    </div>
-    <script src="script.js"></script>
+    <h1>Welcome to AR Viewer</h1>
+    <p>Click the button below to generate a QR code for your frame.</p>
+    <button id="generateBtn">Generate QR Code</button>
+    <div id="qrCode"></div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            fetch('/api/generate-qr', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data: 'Your frame data or URL here' }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const qrImage = document.createElement('img');
+                qrImage.src = data.qr;
+                document.getElementById('qrCode').appendChild(qrImage);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html>
