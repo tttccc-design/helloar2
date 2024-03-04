@@ -1,19 +1,11 @@
-// /api/generate-qr.js
-const express = require('express');
 const QRCode = require('qrcode');
-const app = express();
 
-app.use(express.json()); // Middleware to parse JSON bodies
-
-app.post('*', async (req, res) => {
+module.exports = async (req, res) => {
     const { data } = req.body;
     try {
-        const { data } = req.body; // Data to encode in the QR code, adjust according to your needs
-        const qrCodeUrl = await QRCode.toDataURL(data);
-        res.status(200).send({ url: qrCodeUrl });
+        const qr = await QRCode.toDataURL(data);
+        res.status(200).send({ qr });
     } catch (error) {
-        res.status(500).send({ error: "Error generating QR code" });
+        res.status(500).send({ error: 'Failed to generate QR code' });
     }
-});
-
-module.exports = app;
+};
